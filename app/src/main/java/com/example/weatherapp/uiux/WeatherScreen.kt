@@ -1,4 +1,4 @@
-package com.example.weatherapp
+package com.example.weatherapp.uiux
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
@@ -16,11 +16,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavController
 import coil.compose.rememberAsyncImagePainter
+import com.example.weatherapp.R
 import com.example.weatherapp.weather.WeatherViewModel
 
 @Composable
-fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
+fun WeatherScreen(navController: NavController,viewModel: WeatherViewModel = hiltViewModel()) {
     val weatherData by viewModel.weatherData.collectAsState()
     var city by remember { mutableStateOf("") }
     val key = "3fb96a0af1ba4680bb683923251502"
@@ -82,6 +84,11 @@ fun WeatherScreen(viewModel: WeatherViewModel = hiltViewModel()) {
                         value = it.current.condition.text,
                         image = "https:" + it.current.condition.icon
                     )
+                }
+                Button(onClick = {
+                    viewModel.fetchForecast(key="3fb96a0af1ba4680bb683923251502", q=city,1)
+                    navController.navigate("Forecast")}) {
+                    Text("Go To Forecasting")
                 }
             }
         }
